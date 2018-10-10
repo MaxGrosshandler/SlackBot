@@ -1,20 +1,53 @@
-// Requiring our module
+const slackAPI = require('slackbotapi');
+// slackbotapi is a module used to connect to and interact with Slack's API
+
 const Eris = require("eris");
+// eris is a module used to connect to and interact with Discord's API 
+
+const sf = require('snekfetch')
+// snekfetch is a popular module among Discord bot developers to deal with HTTP requests
+
+const pg = require('pg')
+// pg is the module used to interact with the Postgres-based database hosted on ElephantSQL
+
+const slackweatherbot = require('slackweatherbot');
+// slackweatherbot is used to implement weather functionality into the bot, but I plan on making my own implementation soon
+
 const config = require("./config.json")
-let msg;
-var bot = new Eris(config.dtoken);
-// Replace BOT_TOKEN with your bot account's token
+// The config file allows me to store information like tokens I'd rather not have on a public repo
 
-bot.on("ready", () => { // When the bot is ready
-    console.log("Ready!"); // Log "Ready!"
+
+weatherBot = new slackweatherbot();
+// The Slack bot uses this to check for the weather
+
+let client = new pg.Client(config.pgurl);
+// This is the Postgres client the Slack bot uses
+
+const slack = new slackAPI({
+    'token': config.stoken,
+    'logging': true,
+    'autoReconnect': true
 });
+// This is the object representation of the Slack bot, and also where the Slack bot connects
 
-bot.on("messageCreate", async (msg) => { // When a message is created
+
+const discord = new Eris(config.dtoken);
+// This is the object representation of the Discord bot
+
+discord.connect();
+// This is where the Discord bot connects
+
+discord.on("ready", () => { 
+    console.log("Ready!"); 
+});
+// When the Discord bot is ready, it logs a message to the console
+
+discord.on("messageCreate", async (msg) => { // When a message is created
     if (msg.content === "#ping") { // If the message content is "!ping"
-        bot.createMessage(msg.channel.id, "Pong!");
+        discord.createMessage(msg.channel.id, "Pong!");
         // Send a message in the same channel with "Pong!"
     } else if (msg.content === "#pong") { // Otherwise, if the message is "!pong"
-        bot.createMessage(msg.channel.id, "Ping!");
+        discord.createMessage(msg.channel.id, "Ping!");
         // Respond with "Ping!"
     }
     else if (msg.content.startsWith("#slack")) {
@@ -33,19 +66,14 @@ bot.on("messageCreate", async (msg) => { // When a message is created
     }
 });
 
-bot.connect();
-var slackAPI = require('slackbotapi');
-const sf = require('snekfetch')
-const pg = require('pg')
-let client = new pg.Client(config.pgurl);
+
+
 async function getBottles() {
     return client.query("SELECT * from bottle_Stats").then(num => {
         return num.rows[0];
     })
 }
-let num = 0;
-var slackweatherbot = require('slackweatherbot');
-weatherBot = new slackweatherbot();
+
 
 function pgConnect() {
     client.connect(function (err) {
@@ -68,16 +96,7 @@ async function start() {
 }
 start()
 // Starting
-var slack = new slackAPI({
-    'token': config.stoken,
-    'logging': true,
-    'autoReconnect': true
-});
 
-slack.on('start', async function (data) {
-
-
-})
 // Slack on EVENT message, send data.
 slack.on('message', async function (data) {
     // If no text, return.
@@ -112,21 +131,18 @@ slack.on('message', async function (data) {
                 break;
 
             case 'bottle':
-                //let num = await client.query("SELECT * from bottle_stats")
-                // slack.sendMsg(data.channel, 'I\'ve sent ' + num.rows[0].bottlenumber + ' bottles')
 
-                num = await getBottles();
+                let num = await getBottles();
                 slack.sendMsg(data.channel, "I have sent " + num.bottlenumber + " bottles")
                 break;
 
 
             case 'disc':
                 var disc = data.text.split('!disc ');
-                msg = disc[1]
                 try {
                     await sf
                         .post(config.dhook)
-                        .send({ content: msg, username: "Doot", });
+                        .send({ content: disc[1], username: "Doot", });
                 }
                 catch (err) {
                     console.error(err);
