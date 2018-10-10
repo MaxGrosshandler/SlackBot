@@ -7,9 +7,6 @@ const Eris = require("eris");
 const sf = require('snekfetch')
 // snekfetch is a popular module among Discord bot developers to deal with HTTP requests
 
-const pg = require('pg')
-// pg is the module used to interact with the Postgres-based database hosted on ElephantSQL
-
 const slackweatherbot = require('slackweatherbot');
 // slackweatherbot is used to implement weather functionality into the bot, but I plan on making my own implementation soon
 
@@ -19,9 +16,6 @@ const config = require("./config.json")
 
 weatherBot = new slackweatherbot();
 // The Slack bot uses this to check for the weather
-
-let client = new pg.Client(config.pgurl);
-// This is the Postgres client the Slack bot uses
 
 const slack = new slackAPI({
     'token': config.stoken,
@@ -42,7 +36,7 @@ discord.on("ready", () => {
 });
 // When the Discord bot is ready, it logs a message to the console
 
-discord.on("messageCreate", async (msg) => { // When a message is created
+discord.on("messageCreate", async (msg) => { 
     if (msg.content === "#ping") { // If the message content is "!ping"
         discord.createMessage(msg.channel.id, "Pong!");
         // Send a message in the same channel with "Pong!"
