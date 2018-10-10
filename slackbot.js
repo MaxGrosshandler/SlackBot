@@ -21,7 +21,7 @@ bot.on("messageCreate", async (msg) => { // When a message is created
         let disc = msg.content.split('#slack ');
         try {
             await sf
-                .post("https://hooks.slack.com/services/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")
+                .post(config.shook)
                 .send({ text: disc[1] });
         }
         catch (err) {
@@ -125,7 +125,7 @@ slack.on('message', async function (data) {
                 msg = disc[1]
                 try {
                     await sf
-                        .post("https://canary.discordapp.com/api/webhooks/498868507220377611/NYePLqYTj9aJkH8u0HNnYYQxDmeGDRiceMXvn2X5bkITqADwk1Cb9pBApXYDC73Ehkme")
+                        .post(config.dhook)
                         .send({ content: msg, username: "Doot", });
                 }
                 catch (err) {
