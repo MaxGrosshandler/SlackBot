@@ -57,8 +57,7 @@ slack.on('message', async function (data) {
     if (typeof data.text === 'undefined') return;
     let stuff = data.text.split(" ")
     if (data.text.startsWith('!')) {
-        var cmd = stuff[0]
-        cmd = cmd.substring(1);
+        let cmd = stuff[0].substring(1);
         commands.forEach(function (command) {
             if (command.name == cmd) {
                 stuff.shift();
