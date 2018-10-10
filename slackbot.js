@@ -1,6 +1,6 @@
 // Requiring our module
 const Eris = require("eris");
-const config = reqyire("./config.json")
+const config = require("./config.json")
 let msg;
 var bot = new Eris(config.dtoken);
 // Replace BOT_TOKEN with your bot account's token
@@ -69,7 +69,7 @@ async function start() {
 start()
 // Starting
 var slack = new slackAPI({
-    'token': 'stoken',
+    'token': config.stoken,
     'logging': true,
     'autoReconnect': true
 });
