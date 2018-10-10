@@ -1,7 +1,8 @@
 // Requiring our module
 const Eris = require("eris");
+const config = reqyire("./config.json")
 let msg;
-var bot = new Eris("MjAwMjY5ODE3OTMwODQyMTE0.Dp0OrA.j9eauTeGL-sZkHsaHBVFS2Wq3Hc");
+var bot = new Eris(config.dtoken);
 // Replace BOT_TOKEN with your bot account's token
 
 bot.on("ready", () => { // When the bot is ready
@@ -36,7 +37,7 @@ bot.connect();
 var slackAPI = require('slackbotapi');
 const sf = require('snekfetch')
 const pg = require('pg')
-let client = new pg.Client("postgres://smvaphiq:wg_-fCGQk_jEbL5tGfe7z2V06tA5bgm-@baasu-01.db.elephantsql.com:5432/smvaphiq");
+let client = new pg.Client(config.pgurl);
 async function getBottles() {
     return client.query("SELECT * from bottle_Stats").then(num => {
         return num.rows[0];
@@ -68,7 +69,7 @@ async function start() {
 start()
 // Starting
 var slack = new slackAPI({
-    'token': 'xoxb-446010476145-452767586934-T6QEhpLUrFnWY98K1frdj1Wn',
+    'token': 'stoken',
     'logging': true,
     'autoReconnect': true
 });
