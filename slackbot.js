@@ -1,5 +1,5 @@
 const slackAPI = require('slackbotapi');
-// slackbotapi is a module used to connect to and interact with Slack's API
+// slackbotapi is a module used to connect to and interact with Slack's RTM (Real Time Messaging) API
 
 const Eris = require("eris");
 // eris is a module used to connect to and interact with Discord's API 
@@ -68,35 +68,6 @@ discord.on("messageCreate", async (msg) => { // When a message is created
 
 
 
-async function getBottles() {
-    return client.query("SELECT * from bottle_Stats").then(num => {
-        return num.rows[0];
-    })
-}
-
-
-function pgConnect() {
-    client.connect(function (err) {
-        if (err) {
-            return console.error("could not connect to postgres", err);
-        }
-        client.query('SELECT NOW() AS "theTime"', function (err, result) {
-            if (err) {
-                return console.error("error running query", err);
-            }
-            console.log(result.rows[0].theTime);
-            //output: Tue Jan 15 2013 19:12:47 GMT-600 (CST)
-        });
-    });
-}
-
-async function start() {
-
-    pgConnect()
-}
-start()
-// Starting
-
 // Slack on EVENT message, send data.
 slack.on('message', async function (data) {
     // If no text, return.
@@ -128,12 +99,6 @@ slack.on('message', async function (data) {
             case 'say':
                 var say = data.text.split('!say ');
                 slack.sendMsg(data.channel, say[1]);
-                break;
-
-            case 'bottle':
-
-                let num = await getBottles();
-                slack.sendMsg(data.channel, "I have sent " + num.bottlenumber + " bottles")
                 break;
 
 
