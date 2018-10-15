@@ -1,4 +1,4 @@
-const main = require("../slackbot.js")
+const main = require("../index.js")
 const slack = main.slack;
 module.exports = {
     func: async (data, stuff) => {
