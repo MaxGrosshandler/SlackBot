@@ -1,19 +1,14 @@
 const slackAPI = require('slackbotapi');
 // slackbotapi is a module used to connect to and interact with Slack's RTM (Real Time Messaging) API
+
 const sf = require('snekfetch');
 // snekfetch is a popular module among bot developers to deal with HTTP requests
 
 const fs = require("fs");
-
-const slackweatherbot = require('slackweatherbot');
-// slackweatherbot is used to implement weather functionality into the bot, but I plan on making my own implementation soon
+// This module is used for reading files 
 
 const config = require("./config.json")
 // The config file allows me to store information like tokens I'd rather not have on a public repo
-
-
-weatherBot = new slackweatherbot();
-// The Slack bot uses this to check for the weather
 
 const slack = new slackAPI({
     'token': config.token,
@@ -23,18 +18,19 @@ const slack = new slackAPI({
 // This is the object representation of the Slack bot, and also where the Slack bot connects
 
 let commands = [];
+// This is an array that will store our commands.
+
 function readCommands() {
     fs.readdir("./commands", (err, files) => {
         if (err) console.error(err);
         console.log(
-            `Loading a total of ${files.length} commands into memory.`,
-            false
+            `Loading a total of ${files.length} commands into memory.`
         );
         files.forEach(file => {
             try {
                 const command = require(`./commands/${file}`);
 
-                console.log(`Attempting to load the command "${command.name}".`, false);
+                console.log(`Attempting to load the command "${command.name}".`);
                 commands.push(command)
 
             }
@@ -49,10 +45,13 @@ function readCommands() {
         console.log("\n");
     });
 }
+// This is a helper function for loading in commands from a directory named "commands".
+// This means we can separate out commands from the main file and make it much more readable.
+
 readCommands();
+//This just calls the above helper function
 
 
-// Slack on EVENT message, send data.
 slack.on('message', async function (data) {
     if (typeof data.text === 'undefined') return;
     let stuff = data.text.split(" ")
@@ -61,17 +60,17 @@ slack.on('message', async function (data) {
         commands.forEach(function (command) {
             if (command.name == cmd) {
                 stuff.shift();
-                console.log(stuff)
                 command.func(data, stuff)
             }
-            
+
 
         })
     }
 });
-
+// This handles all incoming message create events in Slack and looks for commands
 slack.on('team_join', function (data) {
-    // Greet a new member that joins
+
     slack.sendPM(data.user.id, 'Hello and welcome to the team! :simple_smile: :beers:');
 });
+// Direct Messages a new user on Workspace join
 module.exports.slack = slack;
