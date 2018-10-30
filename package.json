@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/MaxGrosshandler/SlackBot#readme",
   "dependencies": {
+    "droll": "^0.2.1",
     "slackslime": "^1.0.1"
   }
 }
