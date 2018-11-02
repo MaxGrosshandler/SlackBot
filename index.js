@@ -18,6 +18,7 @@ const slack = new slackAPI({
 // This is the object representation of the Slack bot, and also where the Slack bot connects
 
 let commands = [];
+let helpCommands = [];
 // This is an array that will store our commands.
 
 function readCommands() {
@@ -32,6 +33,15 @@ function readCommands() {
 
                 console.log(`Attempting to load the command "${command.name}".`);
                 commands.push(command)
+                let newCommand = [
+                    command.name,
+                    command.options.description,
+                    command.options.fullDescription,
+                    command.options.usage,
+                    command.func,
+                    command.hidden
+                ];
+                helpCommands.push(newCommand);
 
             }
             catch (err) {
@@ -75,3 +85,4 @@ slack.on('team_join', function (data) {
 // Direct Messages a new user on Workspace join
 module.exports.slack = slack;
 module.exports.sf = sf;
+module.exports.helpCommands = helpCommands;

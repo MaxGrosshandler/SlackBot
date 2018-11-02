@@ -5,5 +5,10 @@ module.exports = {
       // ping
       slack.sendMsg(data.channel, "https://www.pexels.com/photo/adorable-animal-breed-canine-356378/");
   },
+  options: {
+    description: "Dog",
+    fullDescription: "woof",
+    usage: "`!dog`"
+  },
     name: "dog"
   };

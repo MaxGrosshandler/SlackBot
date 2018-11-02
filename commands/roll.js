@@ -13,6 +13,11 @@ module.exports = {
             slack.sendMsg(c, "That isn't a valid roll!")
         }
     },
+    options: {
+        description: "roll",
+        fullDescription: "role?",
+        usage: "`!roll <1d6>`"
+      },
     name: "roll"
   };
 

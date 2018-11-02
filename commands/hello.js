@@ -5,5 +5,10 @@ module.exports = {
       // ping
       slack.sendMsg(data.channel, 'Oh, hello @' + slack.getUser(data.user).name + ' !');
   },
+  options: {
+    description: "hello",
+    fullDescription: "goodbye?",
+    usage: "`!hello`"
+  },
     name: "hello"
   };
