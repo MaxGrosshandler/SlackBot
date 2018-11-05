@@ -6,8 +6,8 @@ module.exports = {
       slack.sendMsg(data.channel, 'Oh, hello @' + slack.getUser(data.user).name + ' !');
   },
   options: {
-    description: "hello",
-    fullDescription: "goodbye?",
+    description: "hello!",
+    fullDescription: "greets the user",
     usage: "`!hello`"
   },
     name: "hello"

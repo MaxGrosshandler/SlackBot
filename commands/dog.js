@@ -6,8 +6,8 @@ module.exports = {
       slack.sendMsg(data.channel, "https://www.pexels.com/photo/adorable-animal-breed-canine-356378/");
   },
   options: {
-    description: "Dog",
-    fullDescription: "woof",
+    description: "Bark",
+    fullDescription: "Posts a picture of a dog",
     usage: "`!dog`"
   },
     name: "dog"

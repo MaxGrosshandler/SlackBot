@@ -28,7 +28,7 @@ module.exports = {
     },
     options: {
         description: "this command",
-        fullDescription: "gives help!",
+        fullDescription: "gives a list of the commands the bot has",
         usage: "`!help`"
     },
     name: "help"

@@ -6,7 +6,7 @@ const sf = require('snekfetch');
 
 const fs = require("fs");
 // This module is used for reading files 
-
+const pg = require("pg");
 const config = require("./config.json")
 // The config file allows me to store information like tokens I'd rather not have on a public repo
 
@@ -57,7 +57,22 @@ function readCommands() {
 }
 // This is a helper function for loading in commands from a directory named "commands".
 // This means we can separate out commands from the main file and make it much more readable.
-
+let client = new pg.Client(config.url);
+function pgConnect() {
+    client.connect(function (err) {
+        if (err) {
+            return console.error("could not connect to postgres", err);
+        }
+        client.query('SELECT NOW() AS "theTime"', function (err, result) {
+            if (err) {
+                return console.error("error running query", err);
+            }
+            console.log(result.rows[0].theTime);
+            //output: Tue Jan 15 2013 19:12:47 GMT-600 (CST)
+        });
+    });
+}
+pgConnect();
 readCommands();
 //This just calls the above helper function
 
@@ -86,3 +101,4 @@ slack.on('team_join', function (data) {
 module.exports.slack = slack;
 module.exports.sf = sf;
 module.exports.helpCommands = helpCommands;
+module.exports.client = client;
