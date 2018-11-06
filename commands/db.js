@@ -10,17 +10,18 @@ module.exports = {
             client.query("insert into users (id) values ($1) ON CONFLICT DO NOTHING", [data.user])
         }
         else {
-          console.log(user.rows[0])
-              slack.sendMsg(data.channel,"You exist in the database, your id is "+person.id)
+              
+          slack.sendMsg(data.channel,"You exist in the database, your id is "+person.id)
+          
         }
         })
   
           
     },
   options: {
-    description: "test",
-    fullDescription: "tests!",
-    usage: "`!test`"
+    description: "database test",
+    fullDescription: "fairly self explanatory",
+    usage: "`!db`"
   },
     name: "db"
   };
