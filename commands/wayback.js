@@ -15,7 +15,7 @@ module.exports = {
   options: {
     description: "Wayback Machine!",
     fullDescription: "Go back in time! You can find the earliest known snapshot of a website by putting in a url!",
-    usage: "`sk wayback <url>`"
+    usage: "`!wayback <url>`"
   },
   name: "wayback"
 };

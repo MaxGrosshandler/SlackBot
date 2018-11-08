@@ -11,7 +11,9 @@ module.exports = {
         }
         else {
               
-          slack.sendMsg(data.channel,"You exist in the database, your id is "+person.id)
+          slack.sendMsg(data.channel,"You exist in the database, your id is "+person.id+
+          "\nWelcome! Your options are as follows:\n1. Do a thing\n2. Do another thing\n"+
+          "3. Do yet another thing")
           
         }
         })
