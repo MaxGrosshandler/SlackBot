@@ -16,7 +16,7 @@ module.exports = {
         })
     }
     catch (err){
-        return slack.sendMsg(data.channel,"The Wayback Machine couldn't find anything! Make sure it's a valid url!")
+        return slack.sendMsg(data.channel,"Invalid symbol!")
     }
 },
   options: {
