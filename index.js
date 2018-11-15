@@ -99,6 +99,6 @@ slack.on('team_join', function (data) {
 });
 // Direct Messages a new user on Workspace join
 module.exports.slack = slack;
-module.exports.sf = sf;
+//module.exports.sf = sf;
 module.exports.helpCommands = helpCommands;
 module.exports.client = client;
