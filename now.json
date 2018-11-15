@@ -1,7 +1,6 @@
 {
     "version": 2,
-    "name": "nodejs",
     "builds": [
-        { "src": "*.js", "use": "npm start" }
+      { "src": "index.js", "use": "@now/node-server" }
     ]
-}
+  }
