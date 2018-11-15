@@ -5,7 +5,7 @@
   "main": "slackbot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "now-build": "npm start"
+    "now-build": "node index.js"
   },
   "repository": {
     "type": "git",
