@@ -9,7 +9,6 @@ const fs = require("fs");
 //const pg = require("pg");
 //const config = require("./config.json")
 // The config file allows me to store information like tokens I'd rather not have on a public repo
-console.log(process.env.TOKEN)
 const slack = new slackAPI({
     'token': process.env.TOKEN,
     'logging': true,
