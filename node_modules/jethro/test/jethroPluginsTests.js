@@ -1,0 +1,370 @@
+"use strict";
+
+var expect = require("unexpected");
+var logger = require("../");
+var request = require("supertest");
+var stdout = require("test-console").stdout;
+var defaultSet = function() {
+    logger.set({
+        "location": "undefined",
+        "timeformat": "undefined",
+        "output": {
+            "source": {
+                "whitelist": [],
+                "blacklist": []
+            },
+            "colour": true,
+            "timestamp": true,
+            "console": true,
+            "timestampOpts": {
+                "brackets": false,
+                "utc": false
+            }
+        }
+    });
+};
+var express = require("express");
+var response = function(req, res) {
+    return res.send("Testing");
+};
+var app = express();
+app.use(logger.express);
+app.delete("/", response);
+app.get("/", response);
+app.options("/", response);
+app.post("/", response);
+app.get("/info", function(req, res) {
+    return res.status(101).send("Testing");
+});
+app.get("/nope", function(req, res) {
+    return res.status(404).send("Testing");
+});
+app.get("/error", function(req, res) {
+    return res.status(500).send("Testing");
+});
+app.get("/redirect", function(req, res) {
+    return res.status(302).send("Testing");
+});
+app.listen(3000);
+
+var restify = require("restify");
+
+var server = restify.createServer({
+    name: "TestApp",
+    version: "1.0.0"
+});
+server.del("/echo", response);
+server.get("/echo", response);
+server.head("/echo", response);
+server.get("/info", function(req, res, next) {
+    res.send(101, "Testing");
+    return next();
+});
+server.get("/nope", function(req, res, next) {
+    res.send(404, "Testing");
+    return next();
+});
+server.get("/error", function(req, res, next) {
+    res.send(500, "Testing");
+    return next();
+});
+server.get("/redirect", function(req, res, next) {
+    res.send(302, "Testing");
+    return next();
+});
+server.get("/version", function(req, res, next) {
+    res.send(400, "Testing");
+    return next();
+});
+server.listen(3001);
+server.on("after", logger.restify);
+
+describe("Express Plugin Test", function() {
+    afterEach(defaultSet);
+    beforeEach(defaultSet);
+    it("Should log  127.0.0.2 for x-real-ip", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .get("/")
+            .set("x-real-ip", "127.0.0.2")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [Express]       127.0.0.2           \x1b[1m\x1b[32m200\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+
+    it("Should log requests", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .get("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [Express]       127.0.0.1           \x1b[1m\x1b[32m200\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should set level to warning for DELETE", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .delete("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [\x1b[1m\x1b[33mWarning\x1b[39m\x1b[22m]   [Express]       127.0.0.1           \x1b[1m\x1b[32m200\x1b[39m\x1b[22m \x1b[1m\x1b[31mDELETE\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should set level to Info for OPTIONS", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .options("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [\x1b[1m\x1b[35mInfo\x1b[39m\x1b[22m]      [Express]       127.0.0.1           \x1b[1m\x1b[32m200\x1b[39m\x1b[22m \x1b[1m\x1b[32mOPTIONS\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should set level to Info for POST", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .post("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [\x1b[1m\x1b[35mInfo\x1b[39m\x1b[22m]      [Express]       127.0.0.1           \x1b[1m\x1b[32m200\x1b[39m\x1b[22m \x1b[1m\x1b[33mPOST\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should change IPv6 localhost to IPv4", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .get("/")
+            .set("x-forwarded-for", "::1")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [Express]       127.0.0.1           \x1b[1m\x1b[32m200\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should set log level to info for 100 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .get("/info")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [\x1b[1m\x1b[35mInfo\x1b[39m\x1b[22m]      [Express]       127.0.0.1           \x1b[1m\x1b[32m101\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should log in cyan for 300 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .get("/redirect")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "\x1b[1m\x1b[36m302\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should log in yellow for 400 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .get("/nope")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "\x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+
+                return done();
+            });
+    });
+
+    it("Should log in red for 500 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(app)
+            .get("/error")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "   \x1b[1m\x1b[31m500\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+
+                return done();
+            });
+    });
+});
+describe("Restify Plugin Test", function() {
+    afterEach(defaultSet);
+    beforeEach(defaultSet);
+
+    it("Should change IPv6 localhost to IPv4", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/")
+            .set("x-forwarded-for", "::1")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "  [Restify]       127.0.0.1       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should log  127.0.0.2 for x-real-ip", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/")
+            .set("x-real-ip", "127.0.0.2")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "  [Restify]       127.0.0.2       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should log  127.0.0.2 for cf-connecting-ip", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/")
+            .set("cf-connecting-ip", "127.0.0.2")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "  [Restify]       127.0.0.2       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+    it("Should log  127.0.0.2 for x-forwarded-for", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/")
+            .set("x-forwarded-for", "127.0.0.2")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "  [Restify]       127.0.0.2       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+    it("Should log requests", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [\x1b[1m\x1b[35mInfo\x1b[39m\x1b[22m]      [Restify]       127.0.0.1       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22");
+                return done();
+            });
+    });
+
+    it("Should set level to warning for DELETE", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .delete("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [\x1b[1m\x1b[33mWarning\x1b[39m\x1b[22m]   [Restify]       127.0.0.1       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[31mDELETE\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should set level to Info for HEAD", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .head("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [\x1b[1m\x1b[35mInfo\x1b[39m\x1b[22m]      [Restify]       127.0.0.1       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[32mHEAD\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should set level to Info for POST", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .post("/")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "  [Restify]       127.0.0.1       \x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[33mPOST\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+    it("Should set log level to info for 100 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/info")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "  [Restify]       127.0.0.1       \x1b[1m\x1b[32m101\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should log in cyan for 300 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/redirect")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "\x1b[1m\x1b[36m302\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should log in yellow for 400 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/nope")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "\x1b[1m\x1b[33m404\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should log in red for 500 statuses", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/error")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", "   \x1b[1m\x1b[31m500\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+
+    it("Should set  req.version if 400 status", function(done) {
+        var inspect = stdout.inspect();
+
+        request(server)
+            .get("/version")
+            .end(function() {
+                inspect.restore();
+                expect(inspect.output[0], "to contain", " [Restify]       127.0.0.1       \x1b[1m\x1b[33m400\x1b[39m\x1b[22m \x1b[1m\x1b[35mGET\x1b[39m\x1b[22m");
+                return done();
+            });
+    });
+});

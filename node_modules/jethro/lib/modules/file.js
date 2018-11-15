@@ -1,0 +1,53 @@
+// - - - - - - - - - - - - - - - - - - File Logging Utility - - - - - - - - - - - - - - - - - - - -
+/*
+Logger.startFile = function(options) {
+    //Preparation for local file logging
+    Logger("info", "Logger", "Starting File logging utility...");
+    Logger.emitter.onAny(function(data) {
+        if (Logger.core.settings.modules.file === true) {
+            var event = this.event;
+            Logger.output(data, function(log) {
+                var dir = path.resolve(__dirname, "../../");
+                if (Logger.core.settings.server === true) {
+                    dir = dir + "/logs/" + data.location;
+                }
+                Logger.file(log, dir + "/" + event);
+                if (event !== "logger" && data.output === true) {
+                    try {
+                        var a = data.source;
+                        var b = event;
+                        if (a.indexOf(b) > -1) {
+                            data.source = a;
+                        } else {
+                            data.source = a + ":" + b;
+                        }
+                        Logger.output(data);
+                    } catch (e) {
+                        Logger('error', 'Logger', 'Event: ' + event + " has not been formatted properly and has created an error! " + e);
+                    }
+                }
+            });
+        }
+    });
+};
+
+Logger.file = function(data, location) {
+    var a = strip(data);
+    try {
+        if (fs.readdirSync(location)) {
+            fs.appendFile(location + "/log " + Logger.util.getDateString() + ".txt", a + "\r\n", function(err) {
+                if (!err) {
+
+                } else {
+
+                }
+            });
+        }
+    } catch (e) {
+        mkdirp(location, function(err) {
+            if (!err) {
+                Logger.file(data, location);
+            }
+        });
+    }
+};*/

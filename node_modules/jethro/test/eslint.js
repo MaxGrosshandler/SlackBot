@@ -1,0 +1,11 @@
+"use strict";
+
+var lint = require("mocha-eslint");
+var paths = [
+    "examples",
+    "lib",
+    "test",
+    "index.js"
+];
+
+lint(paths);
