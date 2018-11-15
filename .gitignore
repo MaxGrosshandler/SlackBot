@@ -60,3 +60,4 @@ typings/
 .next
 
 # configuration
+config.json
