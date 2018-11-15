@@ -58,8 +58,6 @@ function readCommands() {
                 console.log(err.stack);
             }
         });
-        console.log("Command Loading complete!");
-        console.log("\n");
     });
 }
 // This is a helper function for loading in commands from a directory named "commands".
