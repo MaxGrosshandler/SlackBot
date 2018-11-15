@@ -93,10 +93,12 @@ slack.on('message', async function (data) {
     }
 });
 // This handles all incoming message create events in Slack and looks for commands
+/*
 slack.on('team_join', function (data) {
 
     slack.sendPM(data.user.id, 'Hello and welcome to the team! :simple_smile: :beers:');
 });
+*/
 // Direct Messages a new user on Workspace join
 module.exports.slack = slack;
 //module.exports.sf = sf;
