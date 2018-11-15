@@ -19,6 +19,7 @@
   "dependencies": {
     "droll": "^0.2.1",
     "pg": "^7.6.0",
+    "slackbotapi": "^1.3.9",
     "slackslime": "^1.0.1"
   }
 }
