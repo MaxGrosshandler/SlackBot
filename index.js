@@ -32,7 +32,11 @@ function readCommands() {
                 const command = require(`./commands/${file}`);
 
                 console.log(`Attempting to load the command "${command.name}".`);
-                commands.push(command)
+                if (command.name !== "wayback" && command.name !== "convert" && command.name !== "stock")
+                {
+                    commands.push(command)
+                }
+                
                 let newCommand = [
                     command.name,
                     command.options.description,
@@ -41,7 +45,10 @@ function readCommands() {
                     command.func,
                     command.hidden
                 ];
-                helpCommands.push(newCommand);
+                if (command.name !== "wayback" && command.name !== "convert" && command.name !== "stock"){
+                    helpCommands.push(newCommand);
+                }
+                
 
             }
             catch (err) {

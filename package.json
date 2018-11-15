@@ -4,7 +4,7 @@
   "description": "for slack",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "now-build": "npm install snekfetch | node index.js"
+    "now-build": "node index.js"
   },
   "repository": {
     "type": "git",
