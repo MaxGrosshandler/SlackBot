@@ -8,6 +8,7 @@ const fs = require("fs");
 // This module is used for reading files 
 //const pg = require("pg");
 //const config = require("./config.json")
+//
 // The config file allows me to store information like tokens I'd rather not have on a public repo
 const slack = new slackAPI({
     'token': process.env.TOKEN,
