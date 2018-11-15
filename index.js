@@ -6,7 +6,7 @@ const slackAPI = require('slackbotapi');
 
 const fs = require("fs");
 // This module is used for reading files 
-const pg = require("pg");
+//const pg = require("pg");
 const config = require("./config.json")
 // The config file allows me to store information like tokens I'd rather not have on a public repo
 
@@ -32,7 +32,7 @@ function readCommands() {
                 const command = require(`./commands/${file}`);
 
                 console.log(`Attempting to load the command "${command.name}".`);
-                if (command.name !== "wayback" && command.name !== "convert" && command.name !== "stock")
+                if (command.name !== "db" && command.name !== "wayback" && command.name !== "convert" && command.name !== "stock")
                 {
                     commands.push(command)
                 }
@@ -45,7 +45,7 @@ function readCommands() {
                     command.func,
                     command.hidden
                 ];
-                if (command.name !== "wayback" && command.name !== "convert" && command.name !== "stock"){
+                if (command.name !== "db" && command.name !== "wayback" && command.name !== "convert" && command.name !== "stock"){
                     helpCommands.push(newCommand);
                 }
                 
@@ -64,7 +64,8 @@ function readCommands() {
 }
 // This is a helper function for loading in commands from a directory named "commands".
 // This means we can separate out commands from the main file and make it much more readable.
-let client = new pg.Client(config.url);
+//let client = new pg.Client(config.url);
+/*
 function pgConnect() {
     client.connect(function (err) {
         if (err) {
@@ -80,6 +81,7 @@ function pgConnect() {
     });
 }
 pgConnect();
+*/
 readCommands();
 //This just calls the above helper function
 
@@ -110,4 +112,4 @@ slack.on('team_join', function (data) {
 module.exports.slack = slack;
 //module.exports.sf = sf;
 module.exports.helpCommands = helpCommands;
-module.exports.client = client;
+//module.exports.client = client;
