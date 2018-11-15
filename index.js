@@ -7,11 +7,11 @@ const slackAPI = require('slackbotapi');
 const fs = require("fs");
 // This module is used for reading files 
 //const pg = require("pg");
-const config = require("./config.json")
+//const config = require("./config.json")
 // The config file allows me to store information like tokens I'd rather not have on a public repo
 
 const slack = new slackAPI({
-    'token': config.token,
+    'token': process.env.TOKEN,
     'logging': true,
     'autoReconnect': true
 });
