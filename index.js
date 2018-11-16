@@ -15,6 +15,7 @@ const slack = new slackAPI({
     'logging': true,
     'autoReconnect': true
 });
+
 // This is the object representation of the Slack bot, and also where the Slack bot connects
 
 let commands = [];
