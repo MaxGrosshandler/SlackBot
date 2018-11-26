@@ -96,6 +96,17 @@ slack.on('message', async function (data) {
 
         })
     }
+    else if (typeof data.user ==="undefined"){
+        let cmd = stuff[0].substring(1);
+        commands.forEach(function (command) {
+            if (command.name == cmd) {
+                stuff.shift();
+                command.func(data, stuff)
+            }
+
+
+        })
+    }
 });
 // This handles all incoming message create events in Slack and looks for commands
 /*
@@ -105,7 +116,7 @@ slack.on('team_join', function (data) {
 });
 */
 // Direct Messages a new user on Workspace join
-module.exports.slack = slack;
+module.exports.slack= slack;
 module.exports.sf = sf;
 module.exports.helpCommands = helpCommands;
 module.exports.client = client;
