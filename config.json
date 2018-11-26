@@ -1,5 +1,6 @@
 {
     "token": "xoxb-446010476145-452767586934-2xaK7zM6YA3xPWDJ2bpHuw2p",
-    "STOCKS": "E99O7DZL4VS1A2FS"
+    "STOCKS": "E99O7DZL4VS1A2FS",
+    "url": "postgres://mezumdsz:1a_XBb3VdDzjnbWDVBmozivprG85RDs5@pellefant-02.db.elephantsql.com:5432/mezumdsz"
 
 }
