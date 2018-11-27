@@ -86,7 +86,7 @@ slack.on('message', async function (data) {
     if (typeof data.text === 'undefined') return;
     let stuff = data.text.split(" ")
     if (data.text.startsWith('!')) {
-        let cmd = stuff[0].substring(1);
+        let cmd = stuff[0].substring(1).toLowerCase();
         commands.forEach(function (command) {
             if (command.name == cmd) {
                 stuff.shift();
@@ -97,7 +97,7 @@ slack.on('message', async function (data) {
         })
     }
     else if (typeof data.user ==="undefined"){
-        let cmd = stuff[0].substring(1);
+        let cmd = stuff[0].substring(1).toLowerCase();
         commands.forEach(function (command) {
             if (command.name == cmd) {
                 stuff.shift();
