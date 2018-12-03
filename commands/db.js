@@ -1,6 +1,7 @@
 const main = require("../index.js")
 const slack = main.slack;
 const client = main.client;
+// This command serves to show off an example of how to query a database
 module.exports = {
     func: async (data, stuff) => {
         await client.query("select * from users where id = $1", [data.user]).then(user =>{

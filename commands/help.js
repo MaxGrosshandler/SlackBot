@@ -1,6 +1,7 @@
 const main = require("../index.js")
 const helpCommands = main.helpCommands;
 const slack = main.slack;
+// This command displays all the available commands of the bot
 module.exports = {
     func: async (data, stuff) => {
         let str = "";

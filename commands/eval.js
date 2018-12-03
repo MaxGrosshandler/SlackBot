@@ -1,5 +1,6 @@
 const main = require("../index.js")
 const slack = main.slack;
+// This command allows for code to be evaluated mid-runtime
 module.exports = {
   func: async (data, stuff) => {
       let toExecute;

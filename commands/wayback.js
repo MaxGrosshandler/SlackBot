@@ -1,6 +1,7 @@
 const main = require("../index.js")
 let slack = main.slack;
 const sf = main.sf;
+// This command uses the Wayback Machine to find the earliest version of a website
 module.exports = {
   func: async (data, stuff) => {
           try {

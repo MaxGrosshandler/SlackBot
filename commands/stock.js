@@ -2,6 +2,7 @@ const main = require("../index.js")
 let slack = main.slack;
 const sf = main.sf;
 const config = require("../config.json")
+// This command allows the user to look up information on a given stock
 module.exports = {
   func: async (data, stuff) => {
           try {

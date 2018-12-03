@@ -2,6 +2,7 @@ const main = require("../index.js")
 let slack = main.slack;
 const sf = main.sf;
 const config = require("../config.json")
+// This command is used to display the given exchange rate between two currencies
 module.exports = {
   func: async (data, stuff) => {
           try {

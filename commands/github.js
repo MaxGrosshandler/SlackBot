@@ -1,5 +1,6 @@
 const main = require("../index.js")
 const slack = main.slack;
+// This command serves to display a link to the codebase on Github
 module.exports = {
   func: async (data) => {
     slack.sendMsg(data.channel,

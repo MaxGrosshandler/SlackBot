@@ -1,5 +1,6 @@
 const main = require("../index.js")
 const slack = main.slack;
+// This command greets the user
 module.exports = {
     func: async (data) => {
       // ping

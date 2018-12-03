@@ -1,8 +1,8 @@
 const main = require("../index.js")
 const slack = main.slack;
+// This command serves to post an image of a dog, because dogs are great
 module.exports = {
-    func: async (data, stuff) => {
-      // ping
+    func: async (data) => {
       slack.sendMsg(data.channel, "https://www.pexels.com/photo/adorable-animal-breed-canine-356378/");
   },
   options: {
