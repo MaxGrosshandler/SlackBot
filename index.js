@@ -6,11 +6,13 @@ const sf = require('snekfetch');
 // snekfetch is a popular module among bot developers to deal with HTTP requests due to the ease of use associated with the module
 
 const fs = require("fs");
-// This module is used for reading files 
+// This module is used for reading files and is popular
 const pg = require("pg");
+// This module is for connecting with postgres
+
 const config = require("./config.json")
-//
 // The config file allows me to store information like tokens I'd rather not have on a public repo
+
 const slack = new slackAPI({
     'token': config.token,
     'logging': true,
@@ -61,7 +63,9 @@ function readCommands() {
 }
 // This is a helper function for loading in commands from a directory named "commands".
 // This means we can separate out commands from the main file and make it much more readable.
+
 let client = new pg.Client(config.url);
+// This creates the postgres client
 
 function pgConnect() {
     client.connect(function (err) {
@@ -78,9 +82,10 @@ function pgConnect() {
     });
 }
 pgConnect();
+// This is a helper function to connect to the client
 
 readCommands();
-//This just calls the above helper function
+// This just calls the above helper function
 
 
 slack.on('message', async function (data) {
@@ -110,6 +115,8 @@ slack.on('message', async function (data) {
     }
 });
 // This handles all incoming message create events in Slack and looks for commands
+// If it finds a command, 
+
 /*
 slack.on('team_join', function (data) {
 
@@ -121,3 +128,5 @@ module.exports.slack= slack;
 module.exports.sf = sf;
 module.exports.helpCommands = helpCommands;
 module.exports.client = client;
+
+// These exports are for other files in the project
