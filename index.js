@@ -1,8 +1,9 @@
 const slackAPI = require('slackbotapi');
 // slackbotapi is a module used to connect to and interact with Slack's RTM (Real Time Messaging) API
+// I prefer using existing wrappers over making my own logic for handling evetns from Slack to help keep complexity down
 
 const sf = require('snekfetch');
-// snekfetch is a popular module among bot developers to deal with HTTP requests
+// snekfetch is a popular module among bot developers to deal with HTTP requests due to the ease of use associated with the module
 
 const fs = require("fs");
 // This module is used for reading files 
