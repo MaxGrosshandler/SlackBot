@@ -88,6 +88,9 @@ readCommands();
 // This just calls the above helper function
 
 
+
+// Upcoming things: will be adding support for an APi of sorts
+
 slack.on('message', async function (data) {
     if (typeof data.text === 'undefined') return;
     let stuff = data.text.split(" ")
