@@ -92,6 +92,10 @@ readCommands();
 // Upcoming things: will be adding support for an APi of sorts
 
 slack.on('message', async function (data) {
+    // this will trigger if a command is found
+    // the way it works is that it splits the command name off from the commands arguments
+    // even if the command doesn't need arguments, it'll try to get them anyway
+    // one thing i can improve on in the future is to add an arguments property to commands to streamline the process
     if (typeof data.text === 'undefined') return;
     let stuff = data.text.split(" ")
     if (data.text.startsWith('!')) {
@@ -118,7 +122,7 @@ slack.on('message', async function (data) {
     }
 });
 // This handles all incoming message create events in Slack and looks for commands
-// If it finds a command, 
+// If it finds a command, it parses arguments
 
 /*
 slack.on('team_join', function (data) {
