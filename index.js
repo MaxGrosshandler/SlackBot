@@ -109,6 +109,8 @@ slack.on('message', async function (data) {
 
         })
     }
+    // this checks to see if a webhook sent what could be a command
+    // this functionality is somewhat outdated, as I no longer actively send webhook messages to the slack workspace, but it's not taking up too much space so I'll keep it as potential functionality
     else if (typeof data.user ==="undefined"){
         let cmd = stuff[0].substring(1).toLowerCase();
         commands.forEach(function (command) {
