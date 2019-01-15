@@ -6,6 +6,7 @@ const config = require("../config.json")
 module.exports = {
   func: async (data, stuff) => {
           try {
+            // uses the alphavantage api ti get relevant results
         await sf.get("https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency="+stuff[0]+"&to_currency="+stuff[1]+"&apikey="+config.STOCKS, {redirect:true} ).then(result => {
         let results = result.body["Realtime Currency Exchange Rate"]
         let str = ""  
