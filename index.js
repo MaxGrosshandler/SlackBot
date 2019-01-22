@@ -24,13 +24,16 @@ const slack = new slackAPI({
 let commands = [];
 let helpCommands = [];
 // This is an array that will store our commands.
-
+// We will read these commands into memory on startup.
 function readCommands() {
     fs.readdir("./commands", (err, files) => {
+        // read from the directory that has the command files
         if (err) console.error(err);
+        // checks to see if it works or not
         console.log(
             `Loading a total of ${files.length} commands into memory.`
         );
+        // displays how many files are being loaded
         files.forEach(file => {
             try {
                 const command = require(`./commands/${file}`);
@@ -85,11 +88,9 @@ pgConnect();
 // This is a helper function to connect to the client
 
 readCommands();
-// This just calls the above helper function
+// This just calls the helper function for reading commands we made earlier
 
 
-
-// Upcoming things: will be adding support for an APi of sorts
 
 slack.on('message', async function (data) {
     // this will trigger if a command is found
